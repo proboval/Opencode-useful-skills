@@ -38,12 +38,28 @@ python scripts/search_databases.py combined_results.json \
   --output search_results.md \
   --summary
 
-# 5. Screen results and extract data
+# 5. Screen results, then file every full text you read (so no text is lost)
 # - Request extracts with --full-content; obtain original reports and record failures
 # - Use independent final full-text decisions and retain exclusion reasons
 # - Track records, reports, studies, and overlapping participants separately
-# - Extract key data into the review document
-# - Organize by themes
+
+# 5a. Convert each obtained report to Markdown once (local text extraction)
+python scripts/pdf_to_markdown.py inbox --recursive --output-dir reading/
+
+# 5b. File EVERY read paper into exactly one library bucket; the .md (and .pdf)
+#     is copied, so excluded and undecided papers keep their text too.
+#     relevant: needs --topic + --summary, filed under a subtopic directory
+python scripts/organize_library.py file reading/<report>.md --library library \
+  --category relevant --topic "<subtopic>" --summary "<what it contributes>"
+#     dropped: needs --reason (papers excluded at full text)
+python scripts/organize_library.py file reading/<report>.md --library library \
+  --category dropped --reason "<one short sentence>"
+#     questions: needs --reason (papers you cannot decide on yet)
+python scripts/organize_library.py file reading/<report>.md --library library \
+  --category questions --reason "<one short sentence>"
+python scripts/organize_library.py report --library library
+
+# 5c. Extract key data into the review document and organize by themes
 
 # 6. Write the review following template structure
 # - Introduction with clear objectives

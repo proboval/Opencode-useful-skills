@@ -45,16 +45,31 @@ extracts the text locally (no upload), and `scripts/organize_library.py` files
 each read paper into a `Relevant/`, `Dropped/`, or `?` (Questions) library with
 a catalogue and a generated `SUMMARY.md`.
 
+**File every full text you read, including the ones you drop.** Filing is not
+only for accepted papers: the goal is that the text (and its sibling PDF, when
+present) of every report you analyze survives on disk, in a directory named for
+the verdict, so an excluded paper can be re-read or reconsidered later. Convert
+and file each report as you finish reading it, before moving on:
+
 ```bash
+# 1. Convert each report to Markdown once; the extracted text is kept on disk
 python scripts/pdf_to_markdown.py inbox --recursive --output-dir reading/
-python scripts/organize_library.py file reading/paper.md --library library \
+
+# 2. File EVERY read paper into exactly one bucket; the .md (and .pdf) is copied
+python scripts/organize_library.py file reading/delivery_2024.md --library library \
   --category relevant --topic "LNP delivery" --summary "Improves in-vivo editing efficiency."
-python scripts/organize_library.py report --library library
+python scripts/organize_library.py file reading/weather_model.md --library library \
+  --category dropped --reason "Atmospheric model, unrelated to gene editing."
+python scripts/organize_library.py file reading/maybe.md --library library \
+  --category questions --reason "Unclear whether the sample is human or murine."
+
+python scripts/organize_library.py report --library library   # refresh SUMMARY.md
 ```
 
 File a paper only after reading its Markdown. `Relevant` papers get a subtopic
 directory and a short summary; `Dropped` and `?` papers get a one-sentence
-reason (default maximum 15 words). Full workflow, layout, and caveats are in
+reason (default maximum 15 words). The article text is filed in all three cases.
+Full workflow, layout, and caveats are in
 [references/article_library.md](references/article_library.md).
 
 ## Figures and PRISMA reporting
@@ -94,8 +109,9 @@ in [references/core_workflow.md](references/core_workflow.md):
 
 Record every search string and date as you go: a review that cannot reproduce its own
 search is not systematic. During full-text screening, convert each report to Markdown
-and file it as `Relevant`, `Dropped`, or `?` with a recorded reason, so screening
-decisions stay auditable and cheap to re-read ([references/article_library.md](references/article_library.md)).
+and file it as `Relevant`, `Dropped`, or `?` with a recorded reason. File **every**
+report you read, not only the included ones, so their text is preserved and
+screening decisions stay auditable and cheap to re-read ([references/article_library.md](references/article_library.md)).
 Per-database search guidance and citation styles are in
 [references/search_and_citation.md](references/search_and_citation.md), and a full worked
 review is in [references/example_workflow.md](references/example_workflow.md).

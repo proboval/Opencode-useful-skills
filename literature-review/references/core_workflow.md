@@ -136,6 +136,28 @@ Literature reviews follow a structured, multi-phase workflow:
    - Reconcile counts at each transition; do not invent one included-study count
      from the number of publications. Maintain a study-to-report map.
 
+6. **Preserve the text of every report you read**:
+   Before leaving this phase, file each full text into the `Relevant/`, `Dropped/`,
+   or `?` library bucket — not just the included papers. Convert PDFs to Markdown
+   once, then file the `.md` (its sibling `.pdf` is copied too), so no analyzed
+   report is lost:
+
+   ```bash
+   python scripts/pdf_to_markdown.py inbox --recursive --output-dir reading/
+   python scripts/organize_library.py file reading/<report>.md \
+     --library library --category relevant --topic "<subtopic>" --summary "<contribution>"
+   python scripts/organize_library.py file reading/<report>.md \
+     --library library --category dropped --reason "<one short sentence>"
+   python scripts/organize_library.py file reading/<report>.md \
+     --library library --category questions --reason "<one short sentence>"
+   python scripts/organize_library.py report --library library
+   ```
+
+   Only `Relevant` papers get a subtopic directory and a summary; `Dropped` and
+   `?` get a short reason. Article text is stored in all three buckets, and
+   `SUMMARY.md` lists the whole corpus with per-paper reasons. Details:
+   [article_library.md](article_library.md).
+
 ### Phase 4: Data Extraction and Quality Assessment
 
 1. **Extract Key Data** from each included study:
